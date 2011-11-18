@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+
+  
+  <title>Spell Checker Tool &ndash; User Guide</title>
+</head>
+
+
+<body>
+
+
+<div class="Section1">
+<h1>Spell Checker Tool &ndash; User Guide</h1>
+
+
+<h2><span style="font-weight: normal; font-style: normal;">1.</span>
+Introduction</h2>
+
+
+<p>The Spell Checker tool automates the task of spelling-check of
+documents saved in text files (plain text or in MS Word format). This
+helps the users to avoid going though the whole document page by page
+to check the spelling errors. Even with MS Word that has inbuilt spell
+checkers, user has to walk through all the errors one by one or page by
+page -you cannot just see an &ldquo;errors report&rdquo;. This
+tool lets the user see all misspells as a list and decide what to do
+with them. </p>
+
+
+<h2><span style="font-weight: normal; font-style: normal;">2.</span>
+How it works</h2>
+
+
+<p>This tool first initializes its inbuilt English dictionaries
+and any custom dictionaries that the user may have selected. After that
+when the user supplies it an input file to check the spellings, this
+tool does the following:</p>
+
+
+<ol style="margin-top: 0in;" type="1">
+
+
+  <li style="">Extract ALL the text found in the input
+document. </li>
+
+
+  <li style="">Breaks the text into words. A word is any
+contiguous sequence of characters that doesn&rsquo;t contain a
+space, hyphen or a punctuation mark. </li>
+
+
+  <li style="">For each word it then tries to:
+    
+    <ol style="margin-top: 0in;" type="a">
+
+
+      <li style="">Check if it is a number or abbreviation
+etc., if yes then it is ignored. <span style="">&nbsp;</span><br>
+
+
+Else: </li>
+
+
+      <li style="">Find if any dictionary contains the
+word. If not then the word is added into the list of <span class="SpellE">misspelt</span> words. Search in the
+dictionaries is case insensitive.<o:p>&nbsp;</o:p></li>
+
+
+    
+    </ol>
+
+
+  </li>
+
+
+</ol>
+
+
+
+
+<h2><span style="font-weight: normal; font-style: normal;">3.</span>
+Features</h2>
+
+
+<ol style="margin-top: 0in;" type="1">
+
+
+  <li style="">Supports plain text and MS Word document. </li>
+
+
+  <li style="">Allows saving the spelling errors report to
+a file. </li>
+
+
+  <li style="">Includes both US and UK English
+dictionaries by default. </li>
+
+
+  <li style="">User can supply multiple custom
+dictionaries. </li>
+
+
+  <li style="">Allows the user to selectively add <span class="SpellE">misspelt</span> words to custom
+dictionary. </li>
+
+
+  <li style="">Settings for a user are persisted i.e. the
+user will find the same settings on next usage of the program. </li>
+
+
+</ol>
+
+
+
+
+<h2>4. Using the tool</h2>
+
+
+<p>Normally the user will do the following sequence of steps for
+utilizing this tool:</p>
+
+
+<ol style="margin-top: 0in;" type="1">
+
+
+  <li style="">Select the input file by clicking on the
+&ldquo;<span style="background: yellow none repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: 10pt; font-family: 'Courier New';">Select
+input file</span>&rdquo; button. It only allows the *.txt and
+*.doc file to be selected. </li>
+
+
+  <li style="">Check the spellings by clicking on
+&ldquo;<span style="background: yellow none repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: 10pt; font-family: 'Courier New';">Check
+spellings</span>&rdquo; button. This may take from few
+seconds to several minutes depending on the size of the input file. </li>
+
+
+  <li style="">Spelling errors if any found in the input
+file will be shown to the user in the &ldquo;<span style="background: yellow none repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: 10pt; font-family: 'Courier New';">Spelling
+errors</span>&rdquo; text pane. Count of errors is displayed
+in the bottom left corner. </li>
+
+
+  <li style="">At this point the user may do one or more
+of the following:
+    
+    <ol style="margin-top: 0in;" type="a">
+
+
+      <li style="">Save the errors in a file by clicking
+on &ldquo;<span style="background: yellow none repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: 10pt; font-family: 'Courier New';">Save
+results as</span>&rdquo;. This errors file can be used to
+create a dictionary. For example, in the very first run of the tool on
+a book that contains non-English words, all such words will be listed
+as errors. User may save the results as a file (<span class="GramE">can</span>
+be named anything), then keep only the valid non-English words in it
+and add the file as a custom dictionary (explained below). </li>
+
+
+      <li style="">Add some of the words from errors list
+to the custom dictionary. This can be done by highlighting the word (or
+multiple words) and then clicking on the &ldquo;<span style="background: yellow none repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: 10pt; font-family: 'Courier New';">Add
+selected to dictionary</span>&rdquo; button. </li>
+
+
+      <li style="">After adding the words as above user
+may re-run the spelling check on the same document.<br>
+
+
+      </li>
+
+
+    
+    </ol>
+
+
+  </li>
+
+
+</ol>
+
+
+
+
+<h2>5. Custom dictionaries</h2>
+
+
+<p>This tool allows the user to add any number of custom
+dictionaries against which to check the spellings. A custom dictionary
+file is a text file containing one word per line.<o:p>&nbsp;</o:p></p>
+
+
+<p>Dictionary settings can be changed by clicking the &ldquo;<span style="background: yellow none repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: 10pt; font-family: 'Courier New';">Dictionary
+settings</span>&rdquo; button. This button opens a dialog box
+that has two sections:</p>
+
+
+<ol style="margin-top: 0in;" type="1">
+
+
+  <li style=""><b style="">Dictionaries</b>
+section: Here the user can &ldquo;<span style="background: yellow none repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: 10pt; font-family: 'Courier New';">Add</span>&rdquo;
+or &ldquo;<span style="background: yellow none repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: 10pt; font-family: 'Courier New';">Remove</span>&rdquo;
+custom dictionaries and also set one of them as a &ldquo;<span style="background: yellow none repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: 10pt; font-family: 'Courier New';">Default</span>&rdquo;
+custom dictionary. A default custom dictionary is the one where new
+words get added when user adds the highlighted errors via
+&ldquo;Add <span style="background: yellow none repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: 10pt; font-family: 'Courier New';">selected
+to dictionary</span>&rdquo; button on the main window. </li>
+
+
+  <li style=""><b style="">Miscellaneous </b>section:
+At present there&rsquo;s only one setting in this section that
+allows the user to set whether the upper case words are to be ignored
+while checking the spellings. </li>
+
+
+</ol>
+
+
+<p><o:p>&nbsp;</o:p></p>
+
+
+</div>
+
+
+</body>
+</html>
