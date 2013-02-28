@@ -52,6 +52,10 @@ public class SpellCheckerApp extends javax.swing.JFrame {
         }
     }
 
+    public SpellChecker getSpellChecker() {
+        return spellChecker;
+    }
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is

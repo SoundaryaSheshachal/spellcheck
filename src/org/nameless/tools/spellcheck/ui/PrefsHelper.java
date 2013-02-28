@@ -14,7 +14,7 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 /**
- * User prefernces are manipulated via this class.
+ * User preferences are manipulated via this class.
  * @author bsodhi
  */
 public class PrefsHelper {

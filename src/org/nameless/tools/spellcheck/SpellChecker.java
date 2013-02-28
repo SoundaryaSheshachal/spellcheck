@@ -39,12 +39,25 @@ public class SpellChecker {
     private TimeUnit unit = TimeUnit.MILLISECONDS;
     private Dictionary sysDictionary = new Dictionary();
     private ArrayList<Dictionary> customDicts = new ArrayList<Dictionary>();
-    private static Integer[] DELIMITERS = {
-            0x000A, 0x000B, 0x000C, 0x000D, 0x2028, 0x2029, 0x0013, 0x2003,/*Whitespace*/
-            0x003A,/*Colon :*/
-            0x2012, 0x2013, 0x2014, 0x2015,/* Dash - */
-            0x002C,/*Comma*/ (int)'\t', 0x002E /* Period .*/, (int)'/', (int)'\\'};
-    private HashSet<Integer> delimiters = new HashSet<Integer>();
+    public static String[] DELIMS_UNICODE = {
+        "u000A", "u000B", "u000C", "u000D", "u2028", "u2029", "u0013", "u2003",/*Whitespace*/
+        "u003A",/*Colon :*/
+        "u2012", "u2013", "u2014", "u2015",/* Dash - */
+        "u002C",/*Comma*/ 
+        "u0009", /*Tab*/
+        "u002E", /* Period .*/ 
+        "u002F", /* Slash */
+        "u005C" /*Backslash*/,
+        "u0023" /*# sign*/,
+        "u0022" /*Quotation mark*/
+    };
+
+//    private static Integer[] DELIMITERS = {
+//            0x000A, 0x000B, 0x000C, 0x000D, 0x2028, 0x2029, 0x0013, 0x2003,/*Whitespace*/
+//            0x003A,/*Colon :*/
+//            0x2012, 0x2013, 0x2014, 0x2015,/* Dash - */
+//            0x002C,/*Comma*/ (int)'\t', 0x002E /* Period .*/, (int)'/', (int)'\\'};
+    
     /**
      * Creates the instance of this class and assigns it the input file to be
      * spell-checked. 
@@ -53,12 +66,6 @@ public class SpellChecker {
     public SpellChecker() throws IOException {        
         // Load the main system sictionary
         sysDictionary.loadFromClasspathJar("dictionaries");
-        delimiters.addAll(Arrays.asList(DELIMITERS));
-        for(String d : PrefsHelper.getWordDelimiters())
-        {
-            int hex = Integer.decode(d.replace("u", "0x"));
-            delimiters.add(hex);
-        }
     }
 
     /**
@@ -98,7 +105,7 @@ public class SpellChecker {
         dicts.add(sysDictionary);
         dicts.addAll(customDicts);
         for (String para : paras) {
-            executor.execute(new SpellCheckerTask(para, listener, dicts, delimiters));
+            executor.execute(new SpellCheckerTask(para, listener, dicts, getDelimiters()));
         }
         
         executor.shutdown();
@@ -132,5 +139,22 @@ public class SpellChecker {
      */
     public void clearCustomDictionaries() {
         customDicts.clear();
+    }
+
+    public HashSet<Integer> getDelimiters() throws NumberFormatException {
+        
+        HashSet<Integer> delimiters = new HashSet<Integer>();
+        // Load word delims
+        HashSet<String> delims = PrefsHelper.getWordDelimiters();
+        if (delims.isEmpty()) {
+            PrefsHelper.saveWordDelimiterPrefs(new HashSet<String>(Arrays.asList(DELIMS_UNICODE)));
+        }
+        for(String d : PrefsHelper.getWordDelimiters())
+        {
+            int hex = Integer.decode(d.replace("u", "0x"));
+            delimiters.add(hex);
+        }
+        logger.info("Loaded "+delimiters.size()+" word delimiters.");
+        return delimiters;
     }
 }
