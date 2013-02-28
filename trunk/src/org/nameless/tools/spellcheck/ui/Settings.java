@@ -6,9 +6,11 @@ package org.nameless.tools.spellcheck.ui;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
@@ -16,6 +18,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import org.nameless.tools.spellcheck.SpellChecker;
 
 /**
  * Panel showing the settings for the application.
@@ -84,6 +87,8 @@ public class Settings extends javax.swing.JPanel {
         addDelimBtn = new javax.swing.JButton();
         removeDelimBtn = new javax.swing.JButton();
         selectedDelim = new javax.swing.JLabel();
+        totalLab = new javax.swing.JLabel();
+        resetDelim = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
 
@@ -122,8 +127,8 @@ public class Settings extends javax.swing.JPanel {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -148,6 +153,11 @@ public class Settings extends javax.swing.JPanel {
 
         wordDelimiters.setModel(new DefaultListModel());
         wordDelimiters.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        wordDelimiters.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                wordDelimitersMouseClicked(evt);
+            }
+        });
         wordDelimiters.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 wordDelimitersValueChanged(evt);
@@ -155,7 +165,8 @@ public class Settings extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(wordDelimiters);
 
-        jLabel1.setText("Word delimiters (Unicode value):");
+        jLabel1.setText("Delimiters (Unicode value):");
+        jLabel1.setToolTipText("<html>See here for unicode values of different symbols<br/>and characters: http://www.unicode.org/charts/</html>");
 
         addDelimBtn.setText("Add");
         addDelimBtn.setMargin(new java.awt.Insets(2, 2, 2, 2));
@@ -173,6 +184,18 @@ public class Settings extends javax.swing.JPanel {
             }
         });
 
+        selectedDelim.setText("Selected: None");
+
+        totalLab.setText("Total:");
+
+        resetDelim.setText("Reset delimiters");
+        resetDelim.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        resetDelim.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetDelimActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -182,16 +205,18 @@ public class Settings extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                                 .addComponent(addDelimBtn)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(removeDelimBtn)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(selectedDelim))
+                                .addComponent(removeDelimBtn))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox1))))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(selectedDelim)
+                            .addComponent(jCheckBox1)
+                            .addComponent(totalLab)
+                            .addComponent(resetDelim)))))
         );
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {addDelimBtn, removeDelimBtn});
@@ -201,14 +226,20 @@ public class Settings extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel1)
                 .addGap(7, 7, 7)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox1))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(selectedDelim)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(totalLab)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(resetDelim)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jCheckBox1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addDelimBtn)
-                    .addComponent(removeDelimBtn)
-                    .addComponent(selectedDelim))
+                    .addComponent(removeDelimBtn))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -242,7 +273,7 @@ public class Settings extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel1, 0, 367, Short.MAX_VALUE)
+                            .addComponent(jPanel1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
@@ -359,6 +390,7 @@ public class Settings extends javax.swing.JPanel {
             Integer.decode(s.replace("u", "0x"));
             DefaultListModel m = (DefaultListModel) wordDelimiters.getModel();
             m.addElement(s);
+            totalLab.setText("Total: "+m.getSize());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(parentDialog, "Invalid unicode value entered!",
                     "Error", JOptionPane.WARNING_MESSAGE);
@@ -375,6 +407,7 @@ public class Settings extends javax.swing.JPanel {
         }
         DefaultListModel model = (DefaultListModel) wordDelimiters.getModel();
         model.removeElementAt(selIndex);
+        totalLab.setText("Total: "+model.getSize());
         
     }//GEN-LAST:event_removeDelimBtnActionPerformed
 
@@ -382,18 +415,37 @@ public class Settings extends javax.swing.JPanel {
         
         int i1=evt.getFirstIndex();
         int i2=evt.getLastIndex();
-        if (i1 < i2) {
+        if (i1 != i2) {
             DefaultListModel m = (DefaultListModel) wordDelimiters.getModel();
-            String s = ""+m.get(i1);
-            int hex = Integer.decode(s.replace("u", "0x"));
-            s = new String(new char[]{(char)hex});
+            String s = fromUnicodeStringToChar(""+m.get(i1));
             wordDelimiters.setToolTipText(s);
             selectedDelim.setText("Selected: ["+s+"]");
         }
     }//GEN-LAST:event_wordDelimitersValueChanged
+
+    private void wordDelimitersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_wordDelimitersMouseClicked
+        // TODO add your handling code here:
+        DefaultListModel m = (DefaultListModel) wordDelimiters.getModel();
+        String s = fromUnicodeStringToChar(""+wordDelimiters.getSelectedValue());
+        wordDelimiters.setToolTipText(s);
+        selectedDelim.setText("Selected: ["+s+"]");
+        
+    }//GEN-LAST:event_wordDelimitersMouseClicked
+
+    private void resetDelimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetDelimActionPerformed
+        
+        HashSet<String> delims = PrefsHelper.getWordDelimiters();
+        delims.addAll(Arrays.asList(SpellChecker.DELIMS_UNICODE));
+        DefaultListModel m = (DefaultListModel) wordDelimiters.getModel();
+        m.clear();
+        for (String d : delims) {
+            m.addElement(d);
+        }
+        totalLab.setText("Total: "+m.getSize());
+    }//GEN-LAST:event_resetDelimActionPerformed
     
     /**
-     * Loads the current user's prefernces.
+     * Loads the current user's preferences.
      * @throws java.util.prefs.BackingStoreException
      */
     private void loadSettings() throws BackingStoreException {
@@ -416,6 +468,7 @@ public class Settings extends javax.swing.JPanel {
         for (String ss : delims) {
             m2.addElement(ss);
         }
+        totalLab.setText("Total: "+delims.size());
     }
     
     /**
@@ -456,8 +509,17 @@ public class Settings extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton removeDelimBtn;
+    private javax.swing.JButton resetDelim;
     private javax.swing.JLabel selectedDelim;
+    private javax.swing.JLabel totalLab;
     private javax.swing.JList wordDelimiters;
     // End of variables declaration//GEN-END:variables
+
+    private String fromUnicodeStringToChar(String ucStr) throws NumberFormatException {
+        String s = ""+ucStr;
+        int hex = Integer.decode(s.replace("u", "0x"));
+        s = new String(new char[]{(char)hex});
+        return s;
+    }
     
 }
