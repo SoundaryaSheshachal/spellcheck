@@ -1,7 +1,6 @@
 /*
  * RSS Beas.
  */
-
 package org.nameless.tools.spellcheck.ui;
 
 import java.util.Arrays;
@@ -15,41 +14,52 @@ import java.util.prefs.Preferences;
 
 /**
  * User preferences are manipulated via this class.
+ *
  * @author bsodhi
  */
 public class PrefsHelper {
+
     public static final String CAPSWORDSIGNORED = "upper.case.words.ignored";
     public static final String DICTIONARIES = "dictionaries";
     public static final String LASTDIRECTORY = "last.accessed.directory";
     public static final String WORDDELIMITERS = "word.delimiters";
-    
+    public static final String DICT_IGNORE_US = "dict.ignore.american";
+    public static final String DICT_IGNORE_UK = "dict.ignore.british";
+    public static final String DICT_IGNORE_CA = "dict.ignore.canadian";
+
+    public enum DictLocale {
+
+        American, British, Canadian
+    }
     /**
      * User preferences instance for this application.
      */
-    private static Preferences userPrefs = 
-        Preferences.userNodeForPackage(PrefsHelper.class);
+    private static Preferences userPrefs =
+            Preferences.userNodeForPackage(PrefsHelper.class);
+
     /**
      * Returns all the custom dictionaries set by the current user.
+     *
      * @return A HashMap containing the dictionaries. Key is the ID for the
      * dictionary and value is the absolute path of the dictionary file.
      */
     public static HashMap<String, String> getDictionaries() {
-        
+
         HashMap<String, String> dicts = new HashMap<String, String>();
         try {
             Preferences prefsNode = userPrefs.node(DICTIONARIES);
             String[] keys = prefsNode.keys();
-            
+
             for (String key : keys) {
                 dicts.put(key, prefsNode.get(key, ""));
             }
-            
+
         } catch (BackingStoreException ex) {
             Logger.getLogger(PrefsHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
         return dicts;
     }
-    
+
     public static HashSet<String> getWordDelimiters() {
 
         HashSet<String> delims = new HashSet<String>();
@@ -57,7 +67,7 @@ public class PrefsHelper {
             Preferences prefsNode = userPrefs.node(WORDDELIMITERS);
             String[] keys = prefsNode.keys();
             delims.addAll(Arrays.asList(keys));
-            
+
         } catch (BackingStoreException ex) {
             Logger.getLogger(PrefsHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -66,30 +76,66 @@ public class PrefsHelper {
 
     /**
      * Gets the default custom dictionary set by the current user.
+     *
      * @return Path of the default custom dictionary if set by the current user.
      * If not set then empty string will be returned.
      */
     public static String getDefaultDictionary() {
-        
+
         Preferences prefsNode = userPrefs.node(DICTIONARIES);
         return prefsNode.get("default", "");
     }
 
     /**
      * If the upper case words are to be ignored during the spell checking.
+     *
      * @return
      */
     public static boolean isUpperCaseWordsIgnored() {
         return userPrefs.getBoolean(CAPSWORDSIGNORED, false);
     }
+
     /**
      * Sets the user preference for ignoring the upper case words during the
      * spelling check.
+     *
      * @param ignore
      */
     public static void setUpperCaseWordsIgnored(boolean ignore) {
         try {
-            userPrefs.putBoolean( CAPSWORDSIGNORED, ignore);
+            userPrefs.putBoolean(CAPSWORDSIGNORED, ignore);
+            userPrefs.flush();
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(PrefsHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static boolean isDictIgnored(DictLocale name) {
+        switch (name) {
+            case American:
+                return userPrefs.getBoolean(DICT_IGNORE_US, false);
+            case British:
+                return userPrefs.getBoolean(DICT_IGNORE_UK, false);
+            case Canadian:
+                return userPrefs.getBoolean(DICT_IGNORE_CA, false);
+            default:
+                return false;
+        }
+    }
+
+    public static void setDictIgnored(DictLocale name, boolean ignore) {
+        try {
+            switch (name) {
+                case American:
+                    userPrefs.putBoolean(DICT_IGNORE_US, ignore);
+                    break;
+                case British:
+                    userPrefs.putBoolean(DICT_IGNORE_UK, ignore);
+                    break;
+                case Canadian:
+                    userPrefs.putBoolean(DICT_IGNORE_CA, ignore);
+                    break;
+            }
             userPrefs.flush();
         } catch (BackingStoreException ex) {
             Logger.getLogger(PrefsHelper.class.getName()).log(Level.SEVERE, null, ex);
@@ -97,8 +143,8 @@ public class PrefsHelper {
     }
 
     /**
-     * Saves the custom dictionary preferences as selected by the current
-     * user.
+     * Saves the custom dictionary preferences as selected by the current user.
+     *
      * @param dictPrefs
      */
     public static void saveDictionaryPrefs(HashMap dictPrefs) {
@@ -130,11 +176,12 @@ public class PrefsHelper {
             Logger.getLogger(PrefsHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * Gets the last accessed directory by the user via a file chooser dialog
-     * open through this application so that next time the file chooser
-     * opens in the last location.
+     * open through this application so that next time the file chooser opens in
+     * the last location.
+     *
      * @return
      */
     public static String getLastAccessedDirectory() {
@@ -143,17 +190,17 @@ public class PrefsHelper {
 
     /**
      * Sets the last accessed directory by the user via a file chooser dialog
-     * open through this application so that next time the file chooser
-     * opens in the last location.
+     * open through this application so that next time the file chooser opens in
+     * the last location.
+     *
      * @param path
      */
     public static void setLastAccessedDirectory(String path) {
         try {
-            userPrefs.put( LASTDIRECTORY, path);
+            userPrefs.put(LASTDIRECTORY, path);
             userPrefs.flush();
         } catch (BackingStoreException ex) {
             Logger.getLogger(PrefsHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
 }

@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
+import org.nameless.tools.spellcheck.ui.PrefsHelper;
 
 /**
  * Base class for the dictionary functionality. It provides the common logic for
@@ -132,6 +133,18 @@ public abstract class AbstractDictionary {
             Enumeration entries = jarFile.entries();
             while (entries.hasMoreElements()) {
                 JarEntry ent = (JarEntry) entries.nextElement();
+                String name = ent.getName().toLowerCase();
+                if (name.startsWith("meta-inf")) continue;
+                if (name.contains("american") && PrefsHelper.isDictIgnored(PrefsHelper.DictLocale.American)) {
+                    logger.info("Skipping American dictionary "+name);
+                    continue;
+                } else if (name.contains("british") && PrefsHelper.isDictIgnored(PrefsHelper.DictLocale.British)) {
+                    logger.info("Skipping British dictionary "+name);
+                    continue;
+                } else if (name.contains("canadian") && PrefsHelper.isDictIgnored(PrefsHelper.DictLocale.Canadian)) {
+                    logger.info("Skipping Canadian dictionary "+name);
+                    continue;
+                }
                 HashSet<String> words = 
                         processJarEntry(jarFile.getInputStream(ent));
                 dictionary.addAll(words);
