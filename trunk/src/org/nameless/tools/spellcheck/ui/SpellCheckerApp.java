@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -42,6 +43,8 @@ public class SpellCheckerApp extends javax.swing.JFrame {
     /** Creates new form NewJFrame */
     public SpellCheckerApp() {
         initComponents();
+        //this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        this.setSize(800, 600);
         initSpellChecker();
     }
 

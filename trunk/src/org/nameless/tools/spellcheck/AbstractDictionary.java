@@ -126,6 +126,10 @@ public abstract class AbstractDictionary {
         
         dictionary = new ArrayList<String>();
         try {
+            if (PrefsHelper.isDictIgnored(PrefsHelper.WordListTypes.All)) {
+                logger.info("All system word lists are excluded!");
+                return;
+            }
             URL url = Thread.currentThread().
                     getContextClassLoader().getResource(jarRoot);
             JarURLConnection jarConnection = (JarURLConnection)url.openConnection();
@@ -135,14 +139,17 @@ public abstract class AbstractDictionary {
                 JarEntry ent = (JarEntry) entries.nextElement();
                 String name = ent.getName().toLowerCase();
                 if (name.startsWith("meta-inf")) continue;
-                if (name.contains("american") && PrefsHelper.isDictIgnored(PrefsHelper.DictLocale.American)) {
-                    logger.info("Skipping American dictionary "+name);
+                if (name.contains("american") && PrefsHelper.isDictIgnored(PrefsHelper.WordListTypes.American)) {
+                    logger.info("Skipping American words list: "+name);
                     continue;
-                } else if (name.contains("british") && PrefsHelper.isDictIgnored(PrefsHelper.DictLocale.British)) {
-                    logger.info("Skipping British dictionary "+name);
+                } else if (name.contains("british") && PrefsHelper.isDictIgnored(PrefsHelper.WordListTypes.British)) {
+                    logger.info("Skipping British words list: "+name);
                     continue;
-                } else if (name.contains("canadian") && PrefsHelper.isDictIgnored(PrefsHelper.DictLocale.Canadian)) {
-                    logger.info("Skipping Canadian dictionary "+name);
+                } else if (name.contains("canadian") && PrefsHelper.isDictIgnored(PrefsHelper.WordListTypes.Canadian)) {
+                    logger.info("Skipping Canadian words list: "+name);
+                    continue;
+                } else if (name.contains("english") && PrefsHelper.isDictIgnored(PrefsHelper.WordListTypes.English)) {
+                    logger.info("Skipping English words list: "+name);
                     continue;
                 }
                 HashSet<String> words = 

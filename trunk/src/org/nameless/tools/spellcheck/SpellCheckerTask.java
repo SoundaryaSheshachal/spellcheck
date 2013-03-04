@@ -47,7 +47,7 @@ public class SpellCheckerTask implements Runnable {
      * List of common suffixes added to words as shorthands. For example,
      * s (He's), re (They're), ll (She'll) etc.
      */
-    private List<String> COMMON_SUFFIX = Arrays.asList("s", "nt", "re", "ll", "d", "t", "ve");
+    private List<String> COMMON_SUFFIX = Arrays.asList("s", "re", "ll", "d", "t", "ve");
     
     /**
      * Creates the instance of this task by supplying it with the chunk of

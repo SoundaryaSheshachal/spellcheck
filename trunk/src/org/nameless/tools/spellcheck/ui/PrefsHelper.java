@@ -26,10 +26,12 @@ public class PrefsHelper {
     public static final String DICT_IGNORE_US = "dict.ignore.american";
     public static final String DICT_IGNORE_UK = "dict.ignore.british";
     public static final String DICT_IGNORE_CA = "dict.ignore.canadian";
+    public static final String DICT_IGNORE_EN = "dict.ignore.english";
+    public static final String DICT_IGNORE_ALL = "dict.ignore.all";
 
-    public enum DictLocale {
+    public enum WordListTypes {
 
-        American, British, Canadian
+        All, American, British, Canadian, English
     }
     /**
      * User preferences instance for this application.
@@ -110,22 +112,29 @@ public class PrefsHelper {
         }
     }
 
-    public static boolean isDictIgnored(DictLocale name) {
+    public static boolean isDictIgnored(WordListTypes name) {
         switch (name) {
+            case All:
+                return userPrefs.getBoolean(DICT_IGNORE_ALL, false);
             case American:
                 return userPrefs.getBoolean(DICT_IGNORE_US, false);
             case British:
                 return userPrefs.getBoolean(DICT_IGNORE_UK, false);
             case Canadian:
                 return userPrefs.getBoolean(DICT_IGNORE_CA, false);
+            case English:
+                return userPrefs.getBoolean(DICT_IGNORE_EN, false);
             default:
                 return false;
         }
     }
 
-    public static void setDictIgnored(DictLocale name, boolean ignore) {
+    public static void setDictIgnored(WordListTypes name, boolean ignore) {
         try {
             switch (name) {
+                case All:
+                    userPrefs.putBoolean(DICT_IGNORE_ALL, ignore);
+                    break;
                 case American:
                     userPrefs.putBoolean(DICT_IGNORE_US, ignore);
                     break;
@@ -134,6 +143,9 @@ public class PrefsHelper {
                     break;
                 case Canadian:
                     userPrefs.putBoolean(DICT_IGNORE_CA, ignore);
+                    break;
+                case English:
+                    userPrefs.putBoolean(DICT_IGNORE_EN, ignore);
                     break;
             }
             userPrefs.flush();
