@@ -130,7 +130,7 @@ public class SpellChecker {
             d.setType(Dictionary.CUSTOM_DEF);
         }
         d.loadFromFile(new File(dictFile));
-        logger.info("Added dictionary "+dictFile+". Size "+d.getSize()+" words.");
+        logger.info("Added dictionary ["+dictFile+"]. Size "+d.getSize()+" words.");
         customDicts.add(d);
     }
     
