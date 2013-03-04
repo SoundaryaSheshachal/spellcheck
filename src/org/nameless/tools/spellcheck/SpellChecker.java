@@ -63,7 +63,7 @@ public class SpellChecker {
      * spell-checked. 
      * @throws java.io.IOException
      */
-    public SpellChecker() throws IOException {        
+    public SpellChecker() throws IOException {
         // Load the main system sictionary
         sysDictionary.loadFromClasspathJar("dictionaries");
     }

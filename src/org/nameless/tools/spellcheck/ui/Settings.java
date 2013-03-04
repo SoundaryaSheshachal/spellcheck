@@ -78,9 +78,6 @@ public class Settings extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        exclUSDictionary = new javax.swing.JCheckBox();
-        exclUKDictionary = new javax.swing.JCheckBox();
-        exclCandaDictionary = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jCheckBox1 = new javax.swing.JCheckBox();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -93,8 +90,14 @@ public class Settings extends javax.swing.JPanel {
         resetDelim = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        exclUSWords = new javax.swing.JCheckBox();
+        exclUKWords = new javax.swing.JCheckBox();
+        exclCandianWords = new javax.swing.JCheckBox();
+        exclEnglishWords = new javax.swing.JCheckBox();
+        exclAllSystemWordLists = new javax.swing.JCheckBox();
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Dictionaries"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Custom Word Lists"));
 
         jList1.setModel(new DefaultListModel());
         jScrollPane1.setViewportView(jList1);
@@ -120,33 +123,18 @@ public class Settings extends javax.swing.JPanel {
             }
         });
 
-        exclUSDictionary.setText("Excl. American");
-
-        exclUKDictionary.setText("Excl. British");
-
-        exclCandaDictionary.setText("Excl. Canadian");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(exclUSDictionary)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(exclUKDictionary)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(exclCandaDictionary)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -161,12 +149,7 @@ public class Settings extends javax.swing.JPanel {
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton3)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(exclUSDictionary)
-                    .addComponent(exclUKDictionary)
-                    .addComponent(exclCandaDictionary))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Miscellaneous"));
@@ -262,7 +245,7 @@ public class Settings extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addDelimBtn)
                     .addComponent(removeDelimBtn))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         jCheckBox1.setSelected(PrefsHelper.isUpperCaseWordsIgnored());
@@ -281,22 +264,73 @@ public class Settings extends javax.swing.JPanel {
             }
         });
 
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Excluded Word Lists"));
+
+        exclUSWords.setText("American Words");
+
+        exclUKWords.setText("British Words");
+
+        exclCandianWords.setText("Canadian Words");
+
+        exclEnglishWords.setText("English Words");
+
+        exclAllSystemWordLists.setText("All System Word Lists");
+        exclAllSystemWordLists.setToolTipText("");
+        exclAllSystemWordLists.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exclAllSystemWordListsActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(exclUSWords)
+                    .addComponent(exclEnglishWords))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(exclUKWords)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(exclCandianWords))
+                    .addComponent(exclAllSystemWordLists))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(exclUSWords)
+                    .addComponent(exclUKWords)
+                    .addComponent(exclCandianWords))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(exclEnglishWords)
+                    .addComponent(exclAllSystemWordLists)))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(130, 130, 130)
-                        .addComponent(jButton4)
-                        .addGap(26, 26, 26)
-                        .addComponent(jButton5))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(118, 118, 118)
+                                .addComponent(jButton4)
+                                .addGap(26, 26, 26)
+                                .addComponent(jButton5)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -306,9 +340,11 @@ public class Settings extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton4)
@@ -464,6 +500,12 @@ public class Settings extends javax.swing.JPanel {
             PrefsHelper.setLastAccessedDirectory(fc.getSelectedFile().getParent());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void exclAllSystemWordListsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exclAllSystemWordListsActionPerformed
+        
+        adjustExcludedWordListSelection();
+        
+    }//GEN-LAST:event_exclAllSystemWordListsActionPerformed
     
     /**
      * Loads the current user's preferences.
@@ -492,9 +534,12 @@ public class Settings extends javax.swing.JPanel {
         totalLab.setText("Total: "+delims.size());
         
         // Set the ignored dictionaries
-        exclCandaDictionary.setSelected(PrefsHelper.isDictIgnored(PrefsHelper.DictLocale.Canadian));
-        exclUKDictionary.setSelected(PrefsHelper.isDictIgnored(PrefsHelper.DictLocale.British));
-        exclUSDictionary.setSelected(PrefsHelper.isDictIgnored(PrefsHelper.DictLocale.American));
+        exclCandianWords.setSelected(PrefsHelper.isDictIgnored(PrefsHelper.WordListTypes.Canadian));
+        exclUKWords.setSelected(PrefsHelper.isDictIgnored(PrefsHelper.WordListTypes.British));
+        exclUSWords.setSelected(PrefsHelper.isDictIgnored(PrefsHelper.WordListTypes.American));
+        exclEnglishWords.setSelected(PrefsHelper.isDictIgnored(PrefsHelper.WordListTypes.English));
+        exclAllSystemWordLists.setSelected(PrefsHelper.isDictIgnored(PrefsHelper.WordListTypes.All));
+        adjustExcludedWordListSelection();
     }
     
     /**
@@ -520,9 +565,11 @@ public class Settings extends javax.swing.JPanel {
         PrefsHelper.saveDictionaryPrefs(dicts);
         
         // Save ignored dictionaries prefs
-        PrefsHelper.setDictIgnored(PrefsHelper.DictLocale.Canadian, exclCandaDictionary.isSelected());
-        PrefsHelper.setDictIgnored(PrefsHelper.DictLocale.British, exclUKDictionary.isSelected());
-        PrefsHelper.setDictIgnored(PrefsHelper.DictLocale.American, exclUSDictionary.isSelected());
+        PrefsHelper.setDictIgnored(PrefsHelper.WordListTypes.Canadian, exclCandianWords.isSelected());
+        PrefsHelper.setDictIgnored(PrefsHelper.WordListTypes.British, exclUKWords.isSelected());
+        PrefsHelper.setDictIgnored(PrefsHelper.WordListTypes.American, exclUSWords.isSelected());
+        PrefsHelper.setDictIgnored(PrefsHelper.WordListTypes.English, exclEnglishWords.isSelected());
+        PrefsHelper.setDictIgnored(PrefsHelper.WordListTypes.All, exclAllSystemWordLists.isSelected());
         
         // Apply the changes to spell checker
         SpellCheckerApp app = (SpellCheckerApp) parentDialog.getParent();
@@ -531,9 +578,11 @@ public class Settings extends javax.swing.JPanel {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addDelimBtn;
-    private javax.swing.JCheckBox exclCandaDictionary;
-    private javax.swing.JCheckBox exclUKDictionary;
-    private javax.swing.JCheckBox exclUSDictionary;
+    private javax.swing.JCheckBox exclAllSystemWordLists;
+    private javax.swing.JCheckBox exclCandianWords;
+    private javax.swing.JCheckBox exclEnglishWords;
+    private javax.swing.JCheckBox exclUKWords;
+    private javax.swing.JCheckBox exclUSWords;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -544,6 +593,7 @@ public class Settings extends javax.swing.JPanel {
     private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton removeDelimBtn;
@@ -558,6 +608,14 @@ public class Settings extends javax.swing.JPanel {
         int hex = Integer.decode(s.replace("u", "0x"));
         s = new String(new char[]{(char)hex});
         return s;
+    }
+
+    private void adjustExcludedWordListSelection() {
+        boolean enabled = !exclAllSystemWordLists.isSelected();
+        exclCandianWords.setEnabled(enabled);
+        exclEnglishWords.setEnabled(enabled);
+        exclUKWords.setEnabled(enabled);
+        exclUSWords.setEnabled(enabled);
     }
     
 }
