@@ -42,14 +42,7 @@ public class SpellCheckerApp extends javax.swing.JFrame {
     /** Creates new form NewJFrame */
     public SpellCheckerApp() {
         initComponents();
-        try {
-            
-            spellChecker = new SpellChecker();
-            errorsAdapter = new SpellingErrorAdapter(jEditorPane1.getDocument());
-            applyCustomDictionaries();
-        } catch (IOException ex) {
-            Logger.getLogger(SpellCheckerApp.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        initSpellChecker();
     }
 
     public SpellChecker getSpellChecker() {
@@ -524,4 +517,14 @@ public class SpellCheckerApp extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     private SpellChecker spellChecker;
     private SpellingErrorAdapter errorsAdapter;
+
+    public void initSpellChecker() {
+        try {            
+            spellChecker = new SpellChecker();
+            errorsAdapter = new SpellingErrorAdapter(jEditorPane1.getDocument());
+            applyCustomDictionaries();            
+        } catch (IOException ex) {
+            Logger.getLogger(SpellCheckerApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
@@ -79,6 +78,9 @@ public class Settings extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        exclUSDictionary = new javax.swing.JCheckBox();
+        exclUKDictionary = new javax.swing.JCheckBox();
+        exclCandaDictionary = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jCheckBox1 = new javax.swing.JCheckBox();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -118,18 +120,33 @@ public class Settings extends javax.swing.JPanel {
             }
         });
 
+        exclUSDictionary.setText("Excl. American");
+
+        exclUKDictionary.setText("Excl. British");
+
+        exclCandaDictionary.setText("Excl. Canadian");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(exclUSDictionary)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(exclUKDictionary)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(exclCandaDictionary)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -144,6 +161,11 @@ public class Settings extends javax.swing.JPanel {
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton3)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(exclUSDictionary)
+                    .addComponent(exclUKDictionary)
+                    .addComponent(exclCandaDictionary))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -287,11 +309,11 @@ public class Settings extends javax.swing.JPanel {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton4)
                     .addComponent(jButton5))
-                .addGap(23, 23, 23))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -327,55 +349,6 @@ public class Settings extends javax.swing.JPanel {
         // Cancel button handler. We hide the dialog.
         parentDialog.setVisible(false);
     }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // Add new entry. Adds the new custom dictionary to the settings.
-        JFileChooser fc = new JFileChooser();
-        if (PrefsHelper.getLastAccessedDirectory() != null) {
-            fc.setCurrentDirectory(new File(PrefsHelper.getLastAccessedDirectory()));
-        }
-        if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            DefaultListModel model = (DefaultListModel) jList1.getModel();
-            if (model.isEmpty()) { // This is 1st entry so mark it as default
-                model.addElement(fc.getSelectedFile().getAbsolutePath()+ DEF_SUFFIX);
-            } else {
-                model.addElement(fc.getSelectedFile().getAbsolutePath());
-            }
-            PrefsHelper.setLastAccessedDirectory(fc.getSelectedFile().getParent());
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // Remove entry
-        if (!isDictionarySelectionValid()) return;
-        DefaultListModel model = (DefaultListModel) jList1.getModel();
-        model.remove(jList1.getSelectedIndex());
-        
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // Set selected entry as default
-        if (!isDictionarySelectionValid()) return;
-
-        int selIndex = jList1.getSelectedIndex();
-        DefaultListModel model = (DefaultListModel) jList1.getModel();
-        Object[] elements = model.toArray();
-        int defIndex = -1;
-        String oldDef = null;
-        for (int i=0; i<elements.length; i++) {
-            oldDef = elements[i].toString();
-            if (oldDef.toLowerCase().endsWith(DEF_SUFFIX)) {
-                defIndex = i;
-                break;
-            }
-        }
-        if (defIndex != -1) {
-            model.setElementAt(oldDef.substring(0, oldDef.indexOf(DEF_SUFFIX)), defIndex);
-            model.setElementAt(model.elementAt(selIndex).toString() + DEF_SUFFIX, selIndex);
-        } else {
-            model.setElementAt(model.elementAt(selIndex).toString() + DEF_SUFFIX, selIndex);
-        }
-    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void addDelimBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addDelimBtnActionPerformed
         
@@ -443,6 +416,54 @@ public class Settings extends javax.swing.JPanel {
         }
         totalLab.setText("Total: "+m.getSize());
     }//GEN-LAST:event_resetDelimActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // Remove entry
+        if (!isDictionarySelectionValid()) return;
+        DefaultListModel model = (DefaultListModel) jList1.getModel();
+        model.remove(jList1.getSelectedIndex());
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // Set selected entry as default
+        if (!isDictionarySelectionValid()) return;
+
+        int selIndex = jList1.getSelectedIndex();
+        DefaultListModel model = (DefaultListModel) jList1.getModel();
+        Object[] elements = model.toArray();
+        int defIndex = -1;
+        String oldDef = null;
+        for (int i=0; i<elements.length; i++) {
+            oldDef = elements[i].toString();
+            if (oldDef.toLowerCase().endsWith(DEF_SUFFIX)) {
+                defIndex = i;
+                break;
+            }
+        }
+        if (defIndex != -1) {
+            model.setElementAt(oldDef.substring(0, oldDef.indexOf(DEF_SUFFIX)), defIndex);
+            model.setElementAt(model.elementAt(selIndex).toString() + DEF_SUFFIX, selIndex);
+        } else {
+            model.setElementAt(model.elementAt(selIndex).toString() + DEF_SUFFIX, selIndex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // Add new entry. Adds the new custom dictionary to the settings.
+        JFileChooser fc = new JFileChooser();
+        if (PrefsHelper.getLastAccessedDirectory() != null) {
+            fc.setCurrentDirectory(new File(PrefsHelper.getLastAccessedDirectory()));
+        }
+        if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            DefaultListModel model = (DefaultListModel) jList1.getModel();
+            if (model.isEmpty()) { // This is 1st entry so mark it as default
+                model.addElement(fc.getSelectedFile().getAbsolutePath()+ DEF_SUFFIX);
+            } else {
+                model.addElement(fc.getSelectedFile().getAbsolutePath());
+            }
+            PrefsHelper.setLastAccessedDirectory(fc.getSelectedFile().getParent());
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
     
     /**
      * Loads the current user's preferences.
@@ -469,6 +490,11 @@ public class Settings extends javax.swing.JPanel {
             m2.addElement(ss);
         }
         totalLab.setText("Total: "+delims.size());
+        
+        // Set the ignored dictionaries
+        exclCandaDictionary.setSelected(PrefsHelper.isDictIgnored(PrefsHelper.DictLocale.Canadian));
+        exclUKDictionary.setSelected(PrefsHelper.isDictIgnored(PrefsHelper.DictLocale.British));
+        exclUSDictionary.setSelected(PrefsHelper.isDictIgnored(PrefsHelper.DictLocale.American));
     }
     
     /**
@@ -492,10 +518,22 @@ public class Settings extends javax.swing.JPanel {
             dicts.put(key, value);
         }
         PrefsHelper.saveDictionaryPrefs(dicts);
+        
+        // Save ignored dictionaries prefs
+        PrefsHelper.setDictIgnored(PrefsHelper.DictLocale.Canadian, exclCandaDictionary.isSelected());
+        PrefsHelper.setDictIgnored(PrefsHelper.DictLocale.British, exclUKDictionary.isSelected());
+        PrefsHelper.setDictIgnored(PrefsHelper.DictLocale.American, exclUSDictionary.isSelected());
+        
+        // Apply the changes to spell checker
+        SpellCheckerApp app = (SpellCheckerApp) parentDialog.getParent();
+        app.initSpellChecker();
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addDelimBtn;
+    private javax.swing.JCheckBox exclCandaDictionary;
+    private javax.swing.JCheckBox exclUKDictionary;
+    private javax.swing.JCheckBox exclUSDictionary;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
