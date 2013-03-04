@@ -53,7 +53,7 @@ public class PrefsHelper {
             String[] keys = prefsNode.keys();
 
             for (String key : keys) {
-                dicts.put(key, prefsNode.get(key, ""));
+                dicts.put(key, prefsNode.get(key, "").trim());
             }
 
         } catch (BackingStoreException ex) {
@@ -85,7 +85,7 @@ public class PrefsHelper {
     public static String getDefaultDictionary() {
 
         Preferences prefsNode = userPrefs.node(DICTIONARIES);
-        return prefsNode.get("default", "");
+        return prefsNode.get("default", "").trim();
     }
 
     /**
@@ -167,7 +167,7 @@ public class PrefsHelper {
             Iterator it = dictPrefs.keySet().iterator();
             while (it.hasNext()) {
                 String key = (String) it.next();
-                prefs.put(key, dictPrefs.get(key).toString());
+                prefs.put(key, dictPrefs.get(key).toString().trim());
             }
             prefs.flush();
         } catch (BackingStoreException ex) {
