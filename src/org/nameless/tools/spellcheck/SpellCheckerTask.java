@@ -6,7 +6,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.nameless.tools.spellcheck;
 
 import java.io.IOException;
@@ -20,8 +19,9 @@ import java.util.regex.Pattern;
 import org.nameless.tools.spellcheck.ui.PrefsHelper;
 
 /**
- * Main runnable task that does the spellings check for a chunk of text. 
+ * Main runnable task that does the spellings check for a chunk of text.
  * Typically it is expected to be run in a separate thread.
+ *
  * @author bsodhi
  */
 public class SpellCheckerTask implements Runnable {
@@ -44,21 +44,22 @@ public class SpellCheckerTask implements Runnable {
     private ArrayList<Dictionary> dictionaries;
     private HashSet<Integer> delimiters;
     /**
-     * List of common suffixes added to words as shorthands. For example,
-     * s (He's), re (They're), ll (She'll) etc.
+     * List of common suffixes added to words as shorthands. For example, s
+     * (He's), re (They're), ll (She'll) etc.
      */
     private List<String> COMMON_SUFFIX = Arrays.asList("s", "re", "ll", "d", "t", "ve");
-    
+
     /**
-     * Creates the instance of this task by supplying it with the chunk of
-     * text to spell check, and the spelling error listener.
+     * Creates the instance of this task by supplying it with the chunk of text
+     * to spell check, and the spelling error listener.
+     *
      * @param text Text to spell-check
      * @param listener Spelling error listener instance.
      * @param dictionaries
      * @param delims
      * @throws java.io.IOException
      */
-    public SpellCheckerTask(String text, SpellingErrorListener listener, 
+    public SpellCheckerTask(String text, SpellingErrorListener listener,
             ArrayList<Dictionary> dictionaries, HashSet<Integer> delims) throws IOException {
         this.text = text;
         this.listener = listener;
@@ -69,35 +70,45 @@ public class SpellCheckerTask implements Runnable {
     /**
      * Checks is the given word exists in the dictionaries. It automatically
      * fires the spelling error events to the spelling error listener.
+     *
      * @param word Word to search.
      */
-    private void checkSpelling(String word) {
-        
+    private boolean checkSpelling(String word) {
+
         boolean exists = false;
         if (word == null || word.trim().length() == 0) {
             exists = true;
         } else if (isFiltered(word)) {
             exists = true;
         } else {
-            for (Dictionary dict : dictionaries) {
-                if (dict.containsWord(word)) {
+
+            if (word.contains("-")) {
+                if (!isInWordList(word)) {
+                    boolean pe = true;
+                    for (String part : word.split("-"))
+                    {
+                        pe = pe && checkSpelling(part.trim());
+                    }
+                    if (!pe) exists = false;
+                } else {
                     exists = true;
-                    break;
                 }
+            } else {
+                exists = isInWordList(word);
             }
         }
-        
         if (!exists) {
             listener.addWord(word);
         }
+        return exists;
     }
 
     /**
-     * Checks if the given word is filtered. A word is filtered if it:
-     * 1) Is an abbreviation (i.e. contains single alphabet characters 
-     * seperated by dots).
-     * 2) Is in upper case and user setting says to ignore upper case words
-     * 3) Is a number or a suffixed number e.g. 23rd, 45th, 1970s etc.
+     * Checks if the given word is filtered. A word is filtered if it: 1) Is an
+     * abbreviation (i.e. contains single alphabet characters seperated by
+     * dots). 2) Is in upper case and user setting says to ignore upper case
+     * words 3) Is a number or a suffixed number e.g. 23rd, 45th, 1970s etc.
+     *
      * @param word Word to check
      * @return true if the word is determined to be filtered, else false.
      */
@@ -108,8 +119,8 @@ public class SpellCheckerTask implements Runnable {
             filtered = true;
         } catch (NumberFormatException nfe) {
         }
-        if (isAbbreviation(word) || PrefsHelper.isUpperCaseWordsIgnored() &&
-                isUpperCase(word)) {
+        if (isAbbreviation(word) || PrefsHelper.isUpperCaseWordsIgnored()
+                && isUpperCase(word)) {
             filtered = true;
         }
         // Takes care of the suffixed numbers e.g. 23rd, 45th, 1970s etc.
@@ -119,6 +130,7 @@ public class SpellCheckerTask implements Runnable {
 
     /**
      * If the given word is in upper case.
+     *
      * @param word Word to check
      * @return true if the word is in upper case, else false.
      */
@@ -135,8 +147,9 @@ public class SpellCheckerTask implements Runnable {
     }
 
     /**
-     * If the given text is possibly an abbreviation. (i.e. contains single 
+     * If the given text is possibly an abbreviation. (i.e. contains single
      * alphabet characters seperated by dots).
+     *
      * @param word Text to check.
      * @return
      */
@@ -152,11 +165,11 @@ public class SpellCheckerTask implements Runnable {
         }
         return abbr;
     }
-    
+
     /**
-     * Main spell-check work is done here. The text chunk supplied to this
-     * task is tokenized into single words and each word is searched in the
-     * dictionaries. Any white space around the words is trimmed and the 
+     * Main spell-check work is done here. The text chunk supplied to this task
+     * is tokenized into single words and each word is searched in the
+     * dictionaries. Any white space around the words is trimmed and the
      * punctuations removed before searching the words in dictionary. Also,
      * hyphen seperated composite words will be split and searched seperately.
      */
@@ -166,10 +179,10 @@ public class SpellCheckerTask implements Runnable {
          * Replace all delimiters with single space so that words can be
          * tokenized with space as delimiter.
          */
-        for(int x : delimiters) {
-            text = text.replace((char)x, ' ');
+        for (int x : delimiters) {
+            text = text.replace((char) x, ' ');
         }
-        
+
         StringTokenizer tokenizer = new StringTokenizer(text, " ");
         for (; tokenizer.hasMoreTokens();) {
             String word = tokenizer.nextToken().trim();
@@ -178,34 +191,35 @@ public class SpellCheckerTask implements Runnable {
                 prevWord = word;
                 word = removePunctuation(word);
             }
-            String[] parts = word.split("-");
-            for (String part : parts)
-                checkSpelling(part.trim());
+            checkSpelling(word);
         }
     }
-    
+
     /**
      * Removes any punctuation ('.', ',', '?', '!' etc.) from around the given
      * word.
+     *
      * @param word
      * @return
      */
     private String removePunctuation(String word) {
-        
+
         StringBuffer sb = new StringBuffer(word);
-        if (word.length() == 0) return word;
+        if (word.length() == 0) {
+            return word;
+        }
         for (String cs : COMMON_SUFFIX) {
-            if (word.endsWith("'"+cs) || word.endsWith("’"+cs)) {
-                sb.delete(sb.length()-cs.length()-1, sb.length());
+            if (word.endsWith("'" + cs) || word.endsWith("’" + cs)) {
+                sb.delete(sb.length() - cs.length() - 1, sb.length());
                 break;
             }
         }
         if (sb.length() > 0) {
             int first = Character.getType(sb.charAt(0));
             int last = Character.getType(sb.charAt(sb.length() - 1));
-            if (last != Character.LOWERCASE_LETTER &&
-                    last != Character.UPPERCASE_LETTER) {
-                sb.deleteCharAt(sb.length()-1);
+            if (last != Character.LOWERCASE_LETTER
+                    && last != Character.UPPERCASE_LETTER) {
+                sb.deleteCharAt(sb.length() - 1);
             }
             if (sb.length() > 0 && first != Character.LOWERCASE_LETTER
                     && first != Character.UPPERCASE_LETTER) {
@@ -213,5 +227,16 @@ public class SpellCheckerTask implements Runnable {
             }
         }
         return sb.toString();
-    }    
+    }
+
+    private boolean isInWordList(String word) {
+        boolean exists = false;
+        for (Dictionary dict : dictionaries) {
+            if (dict.containsWord(word)) {
+                exists = true;
+                break;
+            }
+        }
+        return exists;
+    }
 }
