@@ -71,6 +71,8 @@ public class MSWordUtil {
                 paras = new String[]{getFileContentAsUTF8Text(filename)};
             }
             for (String para : paras) {
+                words.add(para);
+                /*
                 String[] lines = para.split("\\n");
                 for (String line : lines) {
                     String[] tabbed = line.split("\\t");
@@ -81,10 +83,12 @@ public class MSWordUtil {
                         }
                     }
                 }
+                */
             }
         } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
+        logger.info(filename+" has "+words.size()+" para.");
         return words;
     }
     

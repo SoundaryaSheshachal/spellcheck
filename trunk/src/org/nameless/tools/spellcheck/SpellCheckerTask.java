@@ -89,7 +89,7 @@ public class SpellCheckerTask implements Runnable {
                     {
                         pe = pe && checkSpelling(part.trim());
                     }
-                    if (!pe) exists = false;
+                    exists = pe;
                 } else {
                     exists = true;
                 }
@@ -97,15 +97,12 @@ public class SpellCheckerTask implements Runnable {
                 exists = isInWordList(word);
             }
         }
-        if (!exists) {
-            listener.addWord(word);
-        }
         return exists;
     }
 
     /**
      * Checks if the given word is filtered. A word is filtered if it: 1) Is an
-     * abbreviation (i.e. contains single alphabet characters seperated by
+     * abbreviation (i.e. contains single alphabet characters separated by
      * dots). 2) Is in upper case and user setting says to ignore upper case
      * words 3) Is a number or a suffixed number e.g. 23rd, 45th, 1970s etc.
      *
@@ -184,6 +181,7 @@ public class SpellCheckerTask implements Runnable {
         }
 
         StringTokenizer tokenizer = new StringTokenizer(text, " ");
+        ArrayList<String> ufl = new ArrayList<String>();
         for (; tokenizer.hasMoreTokens();) {
             String word = tokenizer.nextToken().trim();
             String prevWord = null;
@@ -191,8 +189,14 @@ public class SpellCheckerTask implements Runnable {
                 prevWord = word;
                 word = removePunctuation(word);
             }
-            checkSpelling(word);
+            boolean found = checkSpelling(word);
+            if (!found) {
+                ufl.add(word);
+            } else {
+                pushErrorToListener(ufl);
+            }
         }
+        pushErrorToListener(ufl);
     }
 
     /**
@@ -238,5 +242,14 @@ public class SpellCheckerTask implements Runnable {
             }
         }
         return exists;
+    }
+
+    private void pushErrorToListener(ArrayList<String> ufl) {
+        if (!ufl.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for(String x : ufl) sb.append(x).append(" ");
+            listener.addWord(sb.toString());
+            ufl.clear();
+        }
     }
 }
