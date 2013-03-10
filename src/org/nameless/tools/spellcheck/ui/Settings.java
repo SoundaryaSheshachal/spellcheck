@@ -88,6 +88,7 @@ public class Settings extends javax.swing.JPanel {
         selectedDelim = new javax.swing.JLabel();
         totalLab = new javax.swing.JLabel();
         resetDelim = new javax.swing.JButton();
+        isFindCompundWords = new javax.swing.JCheckBox();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
@@ -163,9 +164,9 @@ public class Settings extends javax.swing.JPanel {
                 wordDelimitersMouseClicked(evt);
             }
         });
-        wordDelimiters.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                wordDelimitersValueChanged(evt);
+        wordDelimiters.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                wordDelimitersKeyReleased(evt);
             }
         });
         jScrollPane2.setViewportView(wordDelimiters);
@@ -201,6 +202,13 @@ public class Settings extends javax.swing.JPanel {
             }
         });
 
+        isFindCompundWords.setText("Find Compound Words");
+        isFindCompundWords.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                isFindCompundWordsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -221,7 +229,9 @@ public class Settings extends javax.swing.JPanel {
                             .addComponent(selectedDelim)
                             .addComponent(jCheckBox1)
                             .addComponent(totalLab)
-                            .addComponent(resetDelim)))))
+                            .addComponent(resetDelim)
+                            .addComponent(isFindCompundWords))))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {addDelimBtn, removeDelimBtn});
@@ -244,7 +254,8 @@ public class Settings extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addDelimBtn)
-                    .addComponent(removeDelimBtn))
+                    .addComponent(removeDelimBtn)
+                    .addComponent(isFindCompundWords))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
@@ -319,19 +330,17 @@ public class Settings extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGap(118, 118, 118)
-                                .addComponent(jButton4)
-                                .addGap(26, 26, 26)
-                                .addComponent(jButton5)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGap(118, 118, 118)
+                            .addComponent(jButton4)
+                            .addGap(26, 26, 26)
+                            .addComponent(jButton5))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton4, jButton5});
@@ -420,24 +429,8 @@ public class Settings extends javax.swing.JPanel {
         
     }//GEN-LAST:event_removeDelimBtnActionPerformed
 
-    private void wordDelimitersValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_wordDelimitersValueChanged
-        
-        int i1=evt.getFirstIndex();
-        int i2=evt.getLastIndex();
-        if (i1 != i2) {
-            DefaultListModel m = (DefaultListModel) wordDelimiters.getModel();
-            String s = fromUnicodeStringToChar(""+m.get(i1));
-            wordDelimiters.setToolTipText(s);
-            selectedDelim.setText("Selected: ["+s+"]");
-        }
-    }//GEN-LAST:event_wordDelimitersValueChanged
-
     private void wordDelimitersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_wordDelimitersMouseClicked
-        // TODO add your handling code here:
-        DefaultListModel m = (DefaultListModel) wordDelimiters.getModel();
-        String s = fromUnicodeStringToChar(""+wordDelimiters.getSelectedValue());
-        wordDelimiters.setToolTipText(s);
-        selectedDelim.setText("Selected: ["+s+"]");
+        updateCurrentDelimSelection();
         
     }//GEN-LAST:event_wordDelimitersMouseClicked
 
@@ -506,6 +499,17 @@ public class Settings extends javax.swing.JPanel {
         adjustExcludedWordListSelection();
         
     }//GEN-LAST:event_exclAllSystemWordListsActionPerformed
+
+    private void wordDelimitersKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_wordDelimitersKeyReleased
+        
+        updateCurrentDelimSelection();
+    }//GEN-LAST:event_wordDelimitersKeyReleased
+
+    private void isFindCompundWordsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isFindCompundWordsActionPerformed
+        
+        PrefsHelper.setFindCompoundWordsEnabled(isFindCompundWords.isSelected());
+        
+    }//GEN-LAST:event_isFindCompundWordsActionPerformed
     
     /**
      * Loads the current user's preferences.
@@ -513,6 +517,8 @@ public class Settings extends javax.swing.JPanel {
      */
     private void loadSettings() throws BackingStoreException {
 
+        isFindCompundWords.setSelected(PrefsHelper.isFindCompoundWordsEnabled());
+        
         // Load dictionary settings
         HashMap<String, String> dicts = PrefsHelper.getDictionaries();
         DefaultListModel model = (DefaultListModel) jList1.getModel();
@@ -583,6 +589,7 @@ public class Settings extends javax.swing.JPanel {
     private javax.swing.JCheckBox exclEnglishWords;
     private javax.swing.JCheckBox exclUKWords;
     private javax.swing.JCheckBox exclUSWords;
+    private javax.swing.JCheckBox isFindCompundWords;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -616,6 +623,14 @@ public class Settings extends javax.swing.JPanel {
         exclEnglishWords.setEnabled(enabled);
         exclUKWords.setEnabled(enabled);
         exclUSWords.setEnabled(enabled);
+    }
+
+    private void updateCurrentDelimSelection() throws NumberFormatException {
+        
+        DefaultListModel m = (DefaultListModel) wordDelimiters.getModel();
+        String s = fromUnicodeStringToChar(""+wordDelimiters.getSelectedValue());
+        wordDelimiters.setToolTipText(s);
+        selectedDelim.setText("Selected: ["+s+"]");
     }
     
 }

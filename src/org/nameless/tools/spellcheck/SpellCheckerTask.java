@@ -181,19 +181,30 @@ public class SpellCheckerTask implements Runnable {
         }
 
         StringTokenizer tokenizer = new StringTokenizer(text, " ");
+        boolean findCompoundWords = PrefsHelper.isFindCompoundWordsEnabled();
         ArrayList<String> ufl = new ArrayList<String>();
         for (; tokenizer.hasMoreTokens();) {
             String word = tokenizer.nextToken().trim();
+            boolean endsWithPunc = word.matches(".*[,.!?;]");
+            
+            // Remove punctuation marks from both ends
             String prevWord = null;
             while (!word.equals(prevWord)) {
                 prevWord = word;
                 word = removePunctuation(word);
             }
+            
+            // Check spelling in word lists
             boolean found = checkSpelling(word);
-            if (!found) {
-                ufl.add(word);
+            if (findCompoundWords) {
+                if (!found) {
+                    ufl.add(word);
+                    if (endsWithPunc) pushErrorToListener(ufl);
+                } else {
+                    pushErrorToListener(ufl);
+                }
             } else {
-                pushErrorToListener(ufl);
+                if (!found) listener.addWord(word);
             }
         }
         pushErrorToListener(ufl);
