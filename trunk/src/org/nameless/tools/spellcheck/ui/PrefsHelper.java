@@ -28,6 +28,7 @@ public class PrefsHelper {
     public static final String DICT_IGNORE_CA = "dict.ignore.canadian";
     public static final String DICT_IGNORE_EN = "dict.ignore.english";
     public static final String DICT_IGNORE_ALL = "dict.ignore.all";
+    public static final String FIND_COMPOUND_WORDS = "find.compound.words";
 
     public enum WordListTypes {
 
@@ -88,6 +89,18 @@ public class PrefsHelper {
         return prefsNode.get("default", "").trim();
     }
 
+    public static boolean isFindCompoundWordsEnabled() {
+        return userPrefs.getBoolean(FIND_COMPOUND_WORDS, false);
+    }
+    
+    public static void setFindCompoundWordsEnabled(boolean enabled) {
+        try {
+            userPrefs.putBoolean(FIND_COMPOUND_WORDS, enabled);
+            userPrefs.flush();
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(PrefsHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * If the upper case words are to be ignored during the spell checking.
      *
